@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ClimaAPp",
-    "slug": "ClimaAPp",
+    "name": "ClimaApp",
+    "slug": "ClimaApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
