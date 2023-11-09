@@ -9,6 +9,8 @@ Aplicativo desenvolvido para o Projeto do Luís
 ## Instalação de Pacotes
 
 ```javascript
+npm install @react-navigation/native 
+
 npm install @react-navigation/stack
 
 npm install @react-navigation/bottom-tabs
