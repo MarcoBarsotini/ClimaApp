@@ -47,6 +47,13 @@ export function TabNavigator() {
                     <MaterialCommunityIcons name="home" color={color} size={size} />
                 ),
             }} />
+            <Tab.Screen name='ProfileScreen' component={HomeScreen} 
+                options={{
+                tabBarLabel: 'Perfil',
+                tabBarIcon: ({ color, size }) => (
+                    <MaterialCommunityIcons name="account-box" color={color} size={size} />
+                ),
+            }} />
         </Tab.Navigator>
      )
   }
