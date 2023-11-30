@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, StatusBar, FlatList } from '
 import axios from 'axios';
 import { getCEPData, getCityCode } from '../../helpers/cepService';
 import { getWeatherData } from '../../helpers/weatherService';
+import { format } from 'date-fns';
 
 const HomeScreen = () => {
   const [cep, setCEP] = useState('');
@@ -59,7 +60,7 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor="#080808" barStyle="light-content"/>
       <View style={{ padding: 20 }}>
-        <Text>Bem-vindo ao App de Clima!</Text>
+        <Text>Bem-vindo ao Clima.ly!</Text>
 
         <TextInput
           label="CEP"
@@ -94,7 +95,7 @@ const HomeScreen = () => {
               keyExtractor={(item) => item.data}
               renderItem={({ item }) => (
                 <View style={styles.weatherItem}>
-                  <Text>Data: {item.data}</Text>
+                  <Text>Data: {format(new Date(item.data), 'dd/MM/yyyy')}</Text>
                   <Text>Condição: {item.condicao_desc}</Text>
                   <Text>Máxima: {item.max}°C</Text>
                   <Text>Mínima: {item.min}°C</Text>
