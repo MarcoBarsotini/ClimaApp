@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, StatusBar, FlatList } from 'react-native';
-import axios from 'axios';
 import { getCEPData, getCityCode } from '../../helpers/cepService';
 import { getWeatherData } from '../../helpers/weatherService';
 import { format } from 'date-fns';
@@ -60,14 +59,14 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor="#080808" barStyle="light-content"/>
       <View style={{ padding: 20 }}>
-        <Text>Bem-vindo ao Clima.ly!</Text>
+        <Text style={styles.h1}>Bem-vindo ao Clima.ly!</Text>
 
         <TextInput
           label="CEP"
           value={cep}
           onChangeText={setCEP}
           keyboardType="numeric"
-          style={{ marginVertical: 10 }}
+          style={styles.textInput}
         />
 
         <Button title="Buscar Dados do CEP" onPress={handleCEPSubmit} style={{ marginVertical: 10 }} />
@@ -81,7 +80,6 @@ const HomeScreen = () => {
             <Text>Cidade: {cepData.city}</Text>
             <Text>Código da Cidade: {cityCode}</Text>
             <Text>Bairro: {cepData.neighborhood}</Text>
-            <Text>Serviço: {cepData.service}</Text>
             <Text>Estado: {cepData.state}</Text>
             <Text>Rua: {cepData.street}</Text>
           </View>
@@ -114,11 +112,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
+  h1: {
+    fontSize: 30,
+  },
   weatherItem: {
     marginVertical: 10,
     padding: 10,
     backgroundColor: '#ECECEC',
     borderRadius: 8,
+  },
+  textInput: {
+    marginVertical: 10,
+    marginTop: 12,
+    backgroundColor: '#444445',
+    color: '#FFF',
   },
 });
 
