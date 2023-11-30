@@ -1,45 +1,57 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, StatusBar } from 'react-native';
-import { getCEPData } from '../../helpers/cepService';
+import { View, Text, TextInput, Button, StyleSheet, StatusBar, FlatList } from 'react-native';
+import axios from 'axios';
+import { getCEPData, getCityCode } from '../../helpers/cepService';
 import { getWeatherData } from '../../helpers/weatherService';
 
 const HomeScreen = () => {
   const [cep, setCEP] = useState('');
   const [cepData, setCEPData] = useState(null);
-  const [error, setError] = useState(null);
+  const [cityCode, setCityCode] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleCEPSubmit = async () => {
     try {
       const data = await getCEPData(cep);
       console.log('Dados do CEP recebidos:', data);
 
-      // Verifique se a resposta da API de CEP inclui o cityCode
-      if (data.cityCode !== undefined && data.cityCode !== null) {
-        // Use um objeto novo para forçar a atualização
+      if (data.city) {
         setCEPData({ ...data });
         setError(null);
 
-        // Agora, chame a API de previsão do tempo com o cityCode
         try {
-          const weatherResponse = await getWeatherData(data.cityCode, 6);
-          console.log('Dados de clima recebidos:', weatherResponse);
+          const code = await getCityCode(data.city);
+          console.log('Código da cidade:', code);
 
-          // Use um objeto novo para forçar a atualização
-          setWeatherData({ ...weatherResponse });
-        } catch (weatherError) {
-          console.error('Erro ao obter dados de clima:', weatherError);
-          setError('Erro ao obter dados de clima. Verifique o CEP e tente novamente.');
+          setCityCode(code);
+          
+          try {
+            const weatherResponse = await getWeatherData(code, 6);
+            console.log('Dados de clima recebidos:', weatherResponse);
+            setWeatherData({ ...weatherResponse });
+          } catch (weatherError) {
+            console.error('Erro ao obter dados de clima:', weatherError);
+            setError('Erro ao obter dados de clima. Verifique o CEP e tente novamente.');
+            setWeatherData(null);
+          }
+        } catch (cityCodeError) {
+          console.error('Erro ao obter código da cidade:', cityCodeError);
+          setError('Erro ao obter código da cidade. Verifique o CEP e tente novamente.');
+          setWeatherData(null);
         }
       } else {
-        setError('Erro ao obter o cityCode do CEP. Verifique o CEP e tente novamente.');
+        setError('CityCode não disponível nos dados do CEP. Verifique o CEP e tente novamente.');
         setCEPData(null);
+        setCityCode(null);
+        setWeatherData(null);
       }
     } catch (error) {
       console.error('Erro ao obter dados do CEP:', error);
-
       setError('Erro ao obter dados do CEP. Verifique o CEP e tente novamente.');
       setCEPData(null);
+      setCityCode(null);
+      setWeatherData(null);
     }
   };
 
@@ -66,6 +78,7 @@ const HomeScreen = () => {
             <Text>Dados do CEP:</Text>
             <Text>CEP: {cepData.cep}</Text>
             <Text>Cidade: {cepData.city}</Text>
+            <Text>Código da Cidade: {cityCode}</Text>
             <Text>Bairro: {cepData.neighborhood}</Text>
             <Text>Serviço: {cepData.service}</Text>
             <Text>Estado: {cepData.state}</Text>
@@ -73,16 +86,21 @@ const HomeScreen = () => {
           </View>
         )}
 
-        <Button
-          title="Buscar Previsão do Tempo"
-          onPress={() => console.log('Botão de busca de tempo pressionado')} 
-          style={{ marginVertical: 10 }}
-        />
-
         {weatherData && (
           <View style={{ marginVertical: 10 }}>
-            <Text>Dados de Clima:</Text>
-            {/* Exiba os dados do clima conforme necessário */}
+            <Text>Previsão do Tempo:</Text>
+            <FlatList
+              data={weatherData.clima}
+              keyExtractor={(item) => item.data}
+              renderItem={({ item }) => (
+                <View style={styles.weatherItem}>
+                  <Text>Data: {item.data}</Text>
+                  <Text>Condição: {item.condicao_desc}</Text>
+                  <Text>Máxima: {item.max}°C</Text>
+                  <Text>Mínima: {item.min}°C</Text>
+                </View>
+              )}
+            />
           </View>
         )}
       </View>
@@ -94,6 +112,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+  },
+  weatherItem: {
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: '#ECECEC',
+    borderRadius: 8,
   },
 });
 
