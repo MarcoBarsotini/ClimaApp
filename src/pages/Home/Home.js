@@ -75,19 +75,19 @@ const HomeScreen = () => {
 
         {cepData && (
           <View style={{ marginVertical: 10 }}>
-            <Text>Dados do CEP:</Text>
-            <Text>CEP: {cepData.cep}</Text>
-            <Text>Cidade: {cepData.city}</Text>
-            <Text>Código da Cidade: {cityCode}</Text>
-            <Text>Bairro: {cepData.neighborhood}</Text>
-            <Text>Estado: {cepData.state}</Text>
-            <Text>Rua: {cepData.street}</Text>
+            <Text style={styles.h2}>Dados do CEP:</Text>
+            <Text style={styles.h2}>CEP: {cepData.cep}</Text>
+            <Text style={styles.h2}>Cidade: {cepData.city}</Text>
+            <Text style={styles.h2}>Código da Cidade: {cityCode}</Text>
+            <Text style={styles.h2}>Bairro: {cepData.neighborhood}</Text>
+            <Text style={styles.h2}>Estado: {cepData.state}</Text>
+            <Text style={styles.h2}>Rua: {cepData.street}</Text>
           </View>
         )}
 
         {weatherData && (
           <View style={{ marginVertical: 10 }}>
-            <Text>Previsão do Tempo:</Text>
+            <Text style={styles.h2}>Previsão do Tempo:</Text>
             <FlatList
               data={weatherData.clima}
               keyExtractor={(item) => item.data}
@@ -110,10 +110,15 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: '#099CFA',
   },
   h1: {
     fontSize: 30,
+    color: '#FFF',
+  },
+  h2: {
+    fontSize: 15,
+    color: '#FFF',
   },
   weatherItem: {
     marginVertical: 10,
