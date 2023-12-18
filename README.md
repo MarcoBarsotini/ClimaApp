@@ -25,9 +25,3 @@ npm install @react-navigation/drawer
 - [@Yasmin](#)
 - [@Alex](#)
 - [@Maria Eduarda](#)
-
-
-## Suporte
-
-Para suporte, mande um email para marcobarsotini@gmail.com
-
